@@ -4,16 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import br.com.alurachallengejogodaforca.jogodaforcaapi.ConnectionFactory;
 import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
 
 public class ConsultaController {
 	
-	public ArrayList<Palavra> consultaSimples(){
+	public HashSet<Palavra> consultaSimples(){
 		
-		ArrayList<Palavra> listaDePalavras = new ArrayList<Palavra>();
+		HashSet<Palavra> listaDePalavras = new HashSet<Palavra>();
 		
 		ConnectionFactory cf = new ConnectionFactory();
 		
