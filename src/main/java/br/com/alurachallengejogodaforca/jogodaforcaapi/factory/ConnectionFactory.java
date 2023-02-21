@@ -1,4 +1,4 @@
-package br.com.alurachallengejogodaforca.jogodaforcaapi;
+package br.com.alurachallengejogodaforca.jogodaforcaapi.factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
 
-import br.com.alurachallengejogodaforca.jogodaforcaapi.ConnectionFactory;
+import br.com.alurachallengejogodaforca.jogodaforcaapi.factory.ConnectionFactory;
 import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
 
 public class ConsultaController {
