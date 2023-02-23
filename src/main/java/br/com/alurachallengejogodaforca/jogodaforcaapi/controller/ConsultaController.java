@@ -4,26 +4,27 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
+import java.sql.Statement;
 
 import br.com.alurachallengejogodaforca.jogodaforcaapi.factory.ConnectionFactory;
 import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
 
 public class ConsultaController {
 	
-	public HashSet<Palavra> consultaSimples(){
+	private ConnectionFactory cf = new ConnectionFactory();
+	
+	public Palavra consultaSimples(int ID){
 		
-		HashSet<Palavra> listaDePalavras = new HashSet<Palavra>();
-		
-		ConnectionFactory cf = new ConnectionFactory();
-		
-		try(Connection con = cf.criaConexao()){
-			PreparedStatement pst = con.prepareStatement("SELECT * FROM palavras");
+		Palavra palavra = null;
 
+		try(Connection con = cf.criaConexao()){
+			PreparedStatement pst = con.prepareStatement("SELECT ID,conteudo FROM palavras WHERE ID = ?");
+
+			pst.setInt(1, ID);
 			if(pst.execute()) {
 				ResultSet rst = pst.getResultSet();
 				while(rst.next()) {
-					listaDePalavras.add(new Palavra(rst.getInt(1),rst.getString(2)));
+					palavra = new Palavra(rst.getInt(1),rst.getString(2));
 				}
 			}
 		}catch(SQLException ex) {
@@ -31,6 +32,26 @@ public class ConsultaController {
 			System.out.println("Conexão com o banco de dados falhou");
 		}
 		
-		return listaDePalavras;
+		return palavra;
+	}
+	
+	public int consultaNumeroDeLinhas(String nomeDaTabela) {
+		
+		try(Connection con = cf.criaConexao()){
+			
+			try(Statement stm = con.createStatement()){
+				stm.execute(String.format("SELECT COUNT(*) FROM %s",nomeDaTabela));
+				ResultSet rs = stm.getResultSet();
+				
+				while(rs.next()) {
+					return rs.getInt(1);
+				}
+			}
+		}catch(SQLException ex) {
+			System.out.println(ex.getMessage());
+			System.out.println("Conexão com o banco de dados falhou");
+		}
+
+		return -1;
 	}
 }
