@@ -32,7 +32,6 @@ public class PalavrasAleatorias {
 
 		for(int i = 0; i < numeroMaximo; i++) {
 			while(listaDePalavras.contains(palavraGerada) || palavraGerada == null){
-				System.out.println(numeroRandomico);
 				numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
 				palavraGerada = consulta.consultaSimples(numeroRandomico);
 			}
