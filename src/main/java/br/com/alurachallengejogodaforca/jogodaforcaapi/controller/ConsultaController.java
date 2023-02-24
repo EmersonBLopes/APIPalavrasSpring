@@ -54,4 +54,24 @@ public class ConsultaController {
 
 		return -1;
 	}
+	
+	public int consultaUltimaLinha(String nomeDaTabela) {
+		
+		try(Connection con = cf.criaConexao()){
+			
+			try(Statement stm = con.createStatement()){
+				stm.execute(String.format("SELECT id FROM %s ORDER BY id DESC LIMIT 1",nomeDaTabela));
+				ResultSet rs = stm.getResultSet();
+				
+				while(rs.next()) {
+					return rs.getInt(1);
+				}
+			}
+		}catch(SQLException ex) {
+			System.out.println(ex.getMessage());
+			System.out.println("Conexão com o banco de dados falhou");
+		}
+
+		return -1;
+	}
 }

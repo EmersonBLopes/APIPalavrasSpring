@@ -13,22 +13,30 @@ import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
 @RestController
 public class PalavrasAleatorias {
 	
+	public int sorteiaNumero(int min, int max) {
+		return RandomGenerator.getDefault().nextInt(min,max+1);
+	}
+	
 	@GetMapping("/palavras-aleatorias")
 	public LinkedList<Palavra> palavra(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
 		
 		LinkedList<Palavra> listaDePalavras = new LinkedList<Palavra>();
 		ConsultaController consulta = new ConsultaController();
 		
-		int numeroRandomico = RandomGenerator.getDefault().nextInt(1,consulta.consultaNumeroDeLinhas("palavras"));
+
+		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = 5;
+		
+		int numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
 		Palavra palavraGerada = consulta.consultaSimples(numeroRandomico);
 		
 
 		for(int i = 0; i < numeroMaximo; i++) {
-			while(listaDePalavras.contains(palavraGerada)){
-				numeroRandomico = RandomGenerator.getDefault().nextInt(1,consulta.consultaNumeroDeLinhas("palavras"));
+			while(listaDePalavras.contains(palavraGerada) || palavraGerada == null){
+				System.out.println(numeroRandomico);
+				numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
 				palavraGerada = consulta.consultaSimples(numeroRandomico);
 			}
-			listaDePalavras.add(palavraGerada);
+		listaDePalavras.add(palavraGerada);
 		}
 		
 		return listaDePalavras;
