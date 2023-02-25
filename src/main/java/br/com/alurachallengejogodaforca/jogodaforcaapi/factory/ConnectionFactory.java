@@ -17,7 +17,7 @@ public class ConnectionFactory {
 	
 	public Connection criaConexao() throws SQLException{
 		
-		String URL = String.format("jdbc:mysql:%suser=%s&password=%s"+this.host+this.user+this.password);
+		String URL = String.format("jdbc:mysql:%suser=%s&password=%s",this.host,this.user,this.password);
 		return DriverManager.getConnection(URL);
 	}
 }
