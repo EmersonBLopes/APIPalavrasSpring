@@ -24,7 +24,7 @@ public class PalavrasAleatorias {
 		ConsultaController consulta = new ConsultaController();
 		
 
-		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = 5;
+		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = 1;
 		
 		int numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
 		Palavra palavraGerada = consulta.consultaSimples(numeroRandomico);
