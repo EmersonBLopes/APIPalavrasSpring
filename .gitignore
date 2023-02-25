@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-InformacoesConfidencias.java
+src/main/java/br/com/alurachallengejogodaforca/jogodaforcaapi/factory/InformacoesConfidenciais.java
 
 ### STS ###
 .apt_generated
