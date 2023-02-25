@@ -4,20 +4,25 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import org.springframework.beans.factory.annotation.Value;
-
 public class ConnectionFactory {
-	
-	@Value("${database.host}")
+
 	private String host;
-	@Value("${database.user}")
 	private String user;
-	@Value("${database.pass}")
 	private String password;
 	
-	public Connection criaConexao() throws SQLException{
-		
+	public ConnectionFactory(String host, String user, String password) {
+		this.host = host;
+		this.user = user;
+		this.password = password;
+	}
+	
+	public Connection criaConexao(){
 		String URL = String.format("jdbc:mysql:%suser=%s&password=%s",this.host,this.user,this.password);
-		return DriverManager.getConnection(URL);
+		try {
+			return DriverManager.getConnection(URL);
+		}catch(SQLException ex) {
+			System.out.println("Erro de conexão com o banco de dados:"+ex.getMessage());
+			return null;
+		}
 	}
 }
