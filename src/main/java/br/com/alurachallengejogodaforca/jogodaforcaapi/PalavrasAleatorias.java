@@ -36,7 +36,7 @@ public class PalavrasAleatorias {
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
 		
 
-		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = 1;
+		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = consulta.consultaNumeroDeLinhas("palavras");
 		
 		int numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
 		Palavra palavraGerada = consulta.consultaSimples(numeroRandomico);
