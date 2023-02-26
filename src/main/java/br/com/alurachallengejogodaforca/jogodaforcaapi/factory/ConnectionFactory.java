@@ -5,12 +5,24 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
-	private String user = "root";
-	private String password = "123456";
+
+	private String host;
+	private String user;
+	private String password;
 	
-	public Connection criaConexao() throws SQLException{
-		
-		String URL = String.format("jdbc:mysql://localhost/jogo_da_forca?user=%s&password=%s",this.user,this.password);
-		return DriverManager.getConnection(URL);
+	public ConnectionFactory(String host, String user, String password) {
+		this.host = host;
+		this.user = user;
+		this.password = password;
+	}
+	
+	public Connection criaConexao(){
+		String URL = String.format("jdbc:mysql:%suser=%s&password=%s",this.host,this.user,this.password);
+		try {
+			return DriverManager.getConnection(URL);
+		}catch(SQLException ex) {
+			System.out.println("Erro de conexão com o banco de dados: "+ex.getMessage());
+			return null;
+		}
 	}
 }
