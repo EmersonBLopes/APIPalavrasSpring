@@ -21,7 +21,7 @@ public class ConnectionFactory {
 		try {
 			return DriverManager.getConnection(URL);
 		}catch(SQLException ex) {
-			System.out.println("Erro de conexão com o banco de dados:"+ex.getMessage());
+			System.out.println("Erro de conexão com o banco de dados: "+ex.getMessage());
 			return null;
 		}
 	}
