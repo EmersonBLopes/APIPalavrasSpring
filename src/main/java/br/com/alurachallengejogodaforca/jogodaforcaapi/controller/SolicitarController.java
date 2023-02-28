@@ -15,7 +15,7 @@ public class SolicitarController {
 	
 	public boolean adicionarPalavra(String palavra) {
 		
-		try(PreparedStatement pst = con.prepareStatement("INSERT INTO palavras_solicitadas(conteudo)VALUES(?)");){
+		try(PreparedStatement pst = con.prepareStatement("INSERT INTO palavras_solicitadas(conteudo)VALUES(?)")){
 			pst.setString(1, palavra);
 			pst.execute();
 			return true;

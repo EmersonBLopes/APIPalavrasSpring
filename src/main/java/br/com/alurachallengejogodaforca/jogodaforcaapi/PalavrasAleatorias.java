@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.random.RandomGenerator;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +30,9 @@ public class PalavrasAleatorias {
 		return RandomGenerator.getDefault().nextInt(min,max+1);
 	}
 	
+	@CrossOrigin
 	@GetMapping("/palavras-aleatorias")
-	public LinkedList<Palavra> palavra(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
+	public LinkedList<Palavra> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
 		
 		LinkedList<Palavra> listaDePalavras = new LinkedList<Palavra>();
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
@@ -39,13 +41,13 @@ public class PalavrasAleatorias {
 		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = consulta.consultaNumeroDeLinhas("palavras");
 		
 		int numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
-		Palavra palavraGerada = consulta.consultaSimples(numeroRandomico);
+		Palavra palavraGerada = consulta.consulta(numeroRandomico);
 		
 
 		for(int i = 0; i < numeroMaximo; i++) {
 			while(listaDePalavras.contains(palavraGerada) || palavraGerada == null){
 				numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
-				palavraGerada = consulta.consultaSimples(numeroRandomico);
+				palavraGerada = consulta.consulta(numeroRandomico);
 			}
 		listaDePalavras.add(palavraGerada);
 		}
