@@ -16,11 +16,11 @@ public class ConsultaController {
 		this.con = con;
 	}
 	
-	public Palavra consultaSimples(int ID){
+	public Palavra consulta(int ID){
 
 		Palavra palavra = null;
 
-		try(PreparedStatement pst = this.con.prepareStatement("SELECT ID,conteudo FROM palavras WHERE ID = ?");){
+		try(PreparedStatement pst = this.con.prepareStatement("SELECT ID,conteudo FROM palavras WHERE ID = ?")){
 			
 			pst.setInt(1, ID);
 			if(pst.execute()) {
@@ -33,6 +33,12 @@ public class ConsultaController {
 			System.out.println(ex.getMessage());
 			System.out.println("Conexão com o banco de dados falhou");
 		}
+		
+		return palavra;
+	}
+	
+	public Palavra consultaPorCategoria(String categoriaID[]) {
+		Palavra palavra = null;
 		
 		return palavra;
 	}

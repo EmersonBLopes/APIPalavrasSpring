@@ -1,12 +1,13 @@
 package br.com.alurachallengejogodaforca.jogodaforcaapi;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import br.com.alurachallengejogodaforca.jogodaforcaapi.factory.ConnectionFactory;
 
 import br.com.alurachallengejogodaforca.jogodaforcaapi.controller.SolicitarController;
+import br.com.alurachallengejogodaforca.jogodaforcaapi.factory.ConnectionFactory;
 
 @RestController
 public class SolicitarPalavra {
@@ -20,8 +21,9 @@ public class SolicitarPalavra {
 	@Value("${database.pass}")
 	String password;
 	
+	@CrossOrigin
 	@PostMapping("/solicitar")
-	public void solicitar(@RequestParam(value = "palavra", defaultValue="") String palavra) {
+	public void solicitar(@RequestBody String palavra) {
 		
 		if(palavra == "" || palavra.length() < 3 || !palavra.matches("[a-z]+")) return;
 		
