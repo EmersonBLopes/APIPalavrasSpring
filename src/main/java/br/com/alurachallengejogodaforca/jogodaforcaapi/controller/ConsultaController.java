@@ -16,15 +16,17 @@ public class ConsultaController {
 		this.con = con;
 	}
 	
-	public Palavra consulta(int ID){
+	public Palavra consulta(int ID,String tabela){
 
 		Palavra palavra = null;
+		String query = String.format("SELECT ID,conteudo FROM %s WHERE ID = ?",tabela);
 
-		try(PreparedStatement pst = this.con.prepareStatement("SELECT ID,conteudo FROM palavras WHERE ID = ?")){
+		try(PreparedStatement pst = this.con.prepareStatement(query)){
 			
 			pst.setInt(1, ID);
 			if(pst.execute()) {
 				ResultSet rst = pst.getResultSet();
+
 				while(rst.next()) {
 					palavra = new Palavra(rst.getInt(1),rst.getString(2));
 				}
@@ -35,6 +37,25 @@ public class ConsultaController {
 		}
 		
 		return palavra;
+	}
+	
+	public boolean consultaExiste(String palavra, String tabela) {
+		boolean resultado = false;
+		String query = String.format("SELECT id FROM %s WHERE conteudo = ?",tabela);
+		
+		try(PreparedStatement pst = con.prepareStatement(query)){
+			pst.setString(1, palavra);
+			pst.execute();
+			ResultSet rs = pst.getResultSet();
+			resultado = rs.next();
+			while(rs.next()) {
+				System.out.println(rs.getInt(1));
+			}
+		}catch(SQLException ex) {
+			System.out.println(ex.getMessage());
+			System.out.println("Conexão com o banco de dados falhou");
+		}
+		return resultado;
 	}
 	
 	public Palavra consultaPorCategoria(String categoriaID[]) {

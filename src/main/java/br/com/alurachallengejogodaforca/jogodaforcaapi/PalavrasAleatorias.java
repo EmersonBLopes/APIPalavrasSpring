@@ -41,13 +41,13 @@ public class PalavrasAleatorias {
 		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = consulta.consultaNumeroDeLinhas("palavras");
 		
 		int numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
-		Palavra palavraGerada = consulta.consulta(numeroRandomico);
+		Palavra palavraGerada = consulta.consulta(numeroRandomico,"palavras");
 		
 
 		for(int i = 0; i < numeroMaximo; i++) {
 			while(listaDePalavras.contains(palavraGerada) || palavraGerada == null){
 				numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
-				palavraGerada = consulta.consulta(numeroRandomico);
+				palavraGerada = consulta.consulta(numeroRandomico,"palavras");
 			}
 		listaDePalavras.add(palavraGerada);
 		}

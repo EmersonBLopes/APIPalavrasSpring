@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
+
 public class SolicitarController {
 	
 	private Connection con;
@@ -15,13 +17,18 @@ public class SolicitarController {
 	
 	public boolean adicionarPalavra(String palavra) {
 		
-		try(PreparedStatement pst = con.prepareStatement("INSERT INTO palavras_solicitadas(conteudo)VALUES(?)")){
-			pst.setString(1, palavra);
-			pst.execute();
-			return true;
-		}catch(SQLException ex) {
-			System.out.println("Erro de conexão: "+ex.getMessage());
+		ConsultaController consulta = new ConsultaController(this.con);
+		
+		if(!consulta.consultaExiste(palavra, "palavras_solicitadas")) {
+			try(PreparedStatement pst = con.prepareStatement("INSERT INTO palavras_solicitadas(conteudo)VALUES(?)")){
+				pst.setString(1, palavra);
+				pst.execute();
+				return true;
+			}catch(SQLException ex) {
+				System.out.println("Erro de conexão: "+ex.getMessage());
+			}
 		}
+		
 		return false;
 	}
 	
@@ -52,28 +59,34 @@ public class SolicitarController {
 	 *
 	 * @return returna true se ocorrer a transferência, caso contrário false
 	 */
-	public boolean transferirPalvra(int id) {
+	public boolean transferirPalavra(int id) {
+		ConsultaController consulta = new ConsultaController(this.con);
 		
-		try(PreparedStatement PSTPalavraSolicitadas = con.prepareStatement("SELECT conteudo FROM palavras_solicitadas WHERE id = ?");){
-			
-			PSTPalavraSolicitadas.setInt(1,id);
-			PSTPalavraSolicitadas.execute();
-			
-			PreparedStatement PSTTranferePalavra = con.prepareStatement("INSERT INTO palavras(conteudo)VALUES(?)"); 
-			
-			try(ResultSet RSPalavraSelecionada = PSTPalavraSolicitadas.getResultSet()){
+		Palavra palavra = consulta.consulta(id,"palavras_solicitadas");
+
+		if(!consulta.consultaExiste(palavra.getConteudo(), "palavras")) {
+			try(PreparedStatement PSTPalavraSolicitadas = con.prepareStatement("SELECT conteudo FROM palavras_solicitadas WHERE id = ?");){
 				
-				while(RSPalavraSelecionada.next()) {
-					PSTTranferePalavra.setString(1, RSPalavraSelecionada.getString(1));
+				PSTPalavraSolicitadas.setInt(1,id);
+				PSTPalavraSolicitadas.execute();
+				
+				PreparedStatement PSTTranferePalavra = con.prepareStatement("INSERT INTO palavras(conteudo)VALUES(?)"); 
+				
+				try(ResultSet RSPalavraSelecionada = PSTPalavraSolicitadas.getResultSet()){
+					
+					while(RSPalavraSelecionada.next()) {
+						PSTTranferePalavra.setString(1, RSPalavraSelecionada.getString(1));
+					}
+					
+					PSTTranferePalavra.execute();
+					this.removerPalavra("palavras_solicitadas", id);
+					
+					return true;
 				}
-				
-				PSTTranferePalavra.execute();
-				this.removerPalavra("palavras_solicitadas", id);
-				
-				return true;
+			}catch(SQLException ex) {
+				System.out.println("Erro de conexão: "+ex.getMessage());
 			}
-		}catch(SQLException ex) {
-			System.out.println("Erro de conexão: "+ex.getMessage());
+			
 		}
 		
 		return false;
