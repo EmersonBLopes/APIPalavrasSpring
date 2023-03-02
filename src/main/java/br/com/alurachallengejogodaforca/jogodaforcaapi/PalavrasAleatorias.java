@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.random.RandomGenerator;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +34,7 @@ public class PalavrasAleatorias {
 	
 	@CrossOrigin
 	@GetMapping("/palavras-aleatorias")
-	public LinkedList<Palavra> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
+	public ResponseEntity<LinkedList<Palavra>> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
 		
 		LinkedList<Palavra> listaDePalavras = new LinkedList<Palavra>();
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
@@ -51,7 +53,7 @@ public class PalavrasAleatorias {
 			}
 		listaDePalavras.add(palavraGerada);
 		}
-		return listaDePalavras;
+		return new ResponseEntity<LinkedList<Palavra>>(listaDePalavras, HttpStatus.OK);
 	}
 
 }

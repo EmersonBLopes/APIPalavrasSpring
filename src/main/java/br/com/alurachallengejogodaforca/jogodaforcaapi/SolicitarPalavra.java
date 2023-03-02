@@ -1,6 +1,8 @@
 package br.com.alurachallengejogodaforca.jogodaforcaapi;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +25,16 @@ public class SolicitarPalavra {
 	
 	@CrossOrigin
 	@PostMapping("/solicitar")
-	public void solicitar(@RequestBody String palavra) {
+	public ResponseEntity<String> solicitar(@RequestBody String palavra) {
 		
-		if(palavra == "" || palavra.length() < 3 || !palavra.matches("[a-z]+")) return;
+		if(palavra == "" || palavra.length() < 3 || !palavra.matches("[a-z]+")) return new ResponseEntity<String>("Palavra inválida",HttpStatus.BAD_REQUEST);
 		
 		SolicitarController solicitador = new SolicitarController(new ConnectionFactory(host, user, password).criaConexao());
-		solicitador.adicionarPalavra(palavra);
+		if(solicitador.adicionarPalavra(palavra)) {
+			return new ResponseEntity<String>("Solicitação enviada",HttpStatus.OK);
+		}
 		
-		return;
+		return new ResponseEntity<String>("Palavra já solicitada",HttpStatus.ALREADY_REPORTED);
 	}
 }
 
