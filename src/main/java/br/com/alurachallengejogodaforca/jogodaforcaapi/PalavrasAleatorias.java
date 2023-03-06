@@ -1,7 +1,6 @@
 package br.com.alurachallengejogodaforca.jogodaforcaapi;
 
-import java.util.LinkedList;
-import java.util.random.RandomGenerator;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -27,33 +26,28 @@ public class PalavrasAleatorias {
 	@Value("${database.pass}")
 	String password;
 	
-
-	public int sorteiaNumero(int min, int max) {
-		return RandomGenerator.getDefault().nextInt(min,max+1);
-	}
-	
 	@CrossOrigin
 	@GetMapping("/palavras-aleatorias")
-	public ResponseEntity<LinkedList<Palavra>> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
+	public ResponseEntity<HashSet<Palavra>> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
 		
-		LinkedList<Palavra> listaDePalavras = new LinkedList<Palavra>();
+		HashSet<Palavra> listaDePalavras = new HashSet<Palavra>();
+		
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
 		
+		HashSet<Palavra> palavras = consulta.consultaTodas();
 
 		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = consulta.consultaNumeroDeLinhas("palavras");
 		
-		int numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
-		Palavra palavraGerada = consulta.consulta(numeroRandomico,"palavras");
-		
-
-		for(int i = 0; i < numeroMaximo; i++) {
-			while(listaDePalavras.contains(palavraGerada) || palavraGerada == null){
-				numeroRandomico = sorteiaNumero(1, consulta.consultaUltimaLinha("palavras"));
-				palavraGerada = consulta.consulta(numeroRandomico,"palavras");
-			}
-		listaDePalavras.add(palavraGerada);
+		int i = 0;
+		for (Palavra palavra : palavras) {
+			
+			if(i == numeroMaximo) break;
+					
+			listaDePalavras.add(new Palavra(palavra.getID(),palavra.getConteudo()));
+			i++;
 		}
-		return new ResponseEntity<LinkedList<Palavra>>(listaDePalavras, HttpStatus.OK);
+		
+		return new ResponseEntity<HashSet<Palavra>>(listaDePalavras, HttpStatus.OK);
 	}
 
 }

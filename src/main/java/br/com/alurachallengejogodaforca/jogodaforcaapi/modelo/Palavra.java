@@ -1,5 +1,8 @@
 package br.com.alurachallengejogodaforca.jogodaforcaapi.modelo;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"ID","conteudo"})
 public class Palavra{
 	private long ID;
 	private String conteudo;
