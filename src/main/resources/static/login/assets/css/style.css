@@ -1,3 +1,35 @@
 body{
-  background-color:red;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.login__main{
+  padding:2rem;
+  border-radius:10px;
+  box-shadow: 0px 0px 25px rgba(0,0,0,0.1);
+  height:80vh;
+  width:90vw;
+  max-width:520px;
+  align-self:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.login__form{
+  display:flex;
+  box-sizing:border-box;
+  padding:2rem;
+  flex-direction:column;
+}
+
+.login__titulo{
+  color:var(--bs-primary);
+  text-align:center;
+  font-size:2.5rem;
+}
+
+.login__btn{
+    align-self:end;
 }

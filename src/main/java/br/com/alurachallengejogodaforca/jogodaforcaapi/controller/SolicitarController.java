@@ -19,7 +19,7 @@ public class SolicitarController {
 		
 		ConsultaController consulta = new ConsultaController(this.con);
 		
-		if(!consulta.consultaExiste(palavra, "palavras_solicitadas")) {
+		if(!consulta.consultaExiste(palavra, "palavras_solicitadas") && !consulta.consultaExiste(palavra, "palavras")) {
 			try(PreparedStatement pst = con.prepareStatement("INSERT INTO palavras_solicitadas(conteudo)VALUES(?)")){
 				pst.setString(1, palavra);
 				pst.execute();
