@@ -27,7 +27,9 @@ public class SolicitarPalavra {
 	@PostMapping("/solicitar")
 	public ResponseEntity<String> solicitar(@RequestBody String palavra) {
 		
-		if(palavra == "" || palavra.length() < 3 || !palavra.matches("[a-z]+")) return new ResponseEntity<String>("Palavra inválida",HttpStatus.BAD_REQUEST);
+		if(palavra == "" || palavra.length() < 3 || !palavra.matches("[a-z]+")) {
+			return new ResponseEntity<String>("Palavra inválida",HttpStatus.BAD_REQUEST);
+		}
 		
 		SolicitarController solicitador = new SolicitarController(new ConnectionFactory(host, user, password).criaConexao());
 		if(solicitador.adicionarPalavra(palavra)) {

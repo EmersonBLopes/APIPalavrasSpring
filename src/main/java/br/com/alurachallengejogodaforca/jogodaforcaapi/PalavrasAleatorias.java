@@ -28,7 +28,7 @@ public class PalavrasAleatorias {
 	
 	@CrossOrigin
 	@GetMapping("/palavras-aleatorias")
-	public ResponseEntity<HashSet<Palavra>> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "5") int numeroMaximo) {
+	public ResponseEntity<HashSet<Palavra>> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "10") int numeroMaximo) {
 		
 		HashSet<Palavra> listaDePalavras = new HashSet<Palavra>();
 		
