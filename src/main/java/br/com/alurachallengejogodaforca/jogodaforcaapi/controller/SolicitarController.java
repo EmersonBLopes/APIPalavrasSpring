@@ -62,7 +62,7 @@ public class SolicitarController {
 	public boolean transferirPalavra(int id) {
 		ConsultaController consulta = new ConsultaController(this.con);
 		
-		Palavra palavra = consulta.consulta(id,"palavras_solicitadas");
+		Palavra palavra = consulta.consultaPalavra(id,"palavras_solicitadas");
 
 		if(!consulta.consultaExiste(palavra.getConteudo(), "palavras")) {
 			try(PreparedStatement PSTPalavraSolicitadas = con.prepareStatement("SELECT conteudo FROM palavras_solicitadas WHERE id = ?");){

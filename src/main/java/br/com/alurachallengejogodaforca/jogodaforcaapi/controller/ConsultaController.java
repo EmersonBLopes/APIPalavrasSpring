@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 
+import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Modelo;
 import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
 
 public class ConsultaController {
@@ -18,7 +19,7 @@ public class ConsultaController {
 		this.con = con;
 	}
 	
-	public Palavra consulta(int ID,String tabela){
+	public Palavra consultaPalavra(int ID,String tabela){
 
 		Palavra palavra = null;
 		String query = String.format("SELECT ID,conteudo FROM %s WHERE ID = ?",tabela);
@@ -41,17 +42,17 @@ public class ConsultaController {
 		return palavra;
 	}
 	
-	public HashSet<Palavra> consultaTodas(String tabela) {
+	public LinkedHashSet<Modelo> consultaTabela(String tabela) {
 		
 		String query = String.format("SELECT * FROM %s",tabela);
-		HashSet<Palavra> listaDePalavras = new LinkedHashSet<>();
+		LinkedHashSet<Modelo> listaDeResultados = new LinkedHashSet<>();
 		
 		try(Statement stm = con.createStatement()){
 			stm.execute(query);
 			ResultSet rst = stm.getResultSet();
 			
 			while(rst.next()) {
-				listaDePalavras.add(new Palavra(rst.getInt(1),rst.getString(2)));
+				listaDeResultados.add(new Modelo(rst.getInt(1),rst.getString(2)));
 			}
 			
 		}catch(SQLException ex) {
@@ -59,7 +60,7 @@ public class ConsultaController {
 			System.out.println("Conexão com o banco de dados falhou");
 		}
 		
-		return listaDePalavras;
+		return listaDeResultados;
 	}
 	
 	public boolean consultaExiste(String palavra, String tabela) {
