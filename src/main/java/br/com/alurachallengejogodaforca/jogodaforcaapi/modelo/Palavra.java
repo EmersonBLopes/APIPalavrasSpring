@@ -2,14 +2,16 @@ package br.com.alurachallengejogodaforca.jogodaforcaapi.modelo;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"ID","conteudo"})
+@JsonPropertyOrder({"ID","conteudo","categoria"})
 public class Palavra{
 	private long ID;
 	private String conteudo;
+	private String categoria;
 	
-	public Palavra(long ID, String conteudo){
+	public Palavra(long ID, String conteudo, String categoria){
 		this.ID = ID;
 		this.conteudo = conteudo;
+		this.categoria = categoria;
 	}
 
 	public long getID() {
@@ -20,6 +22,9 @@ public class Palavra{
 		return conteudo;
 	}
 	
+	public String getCategoria() {
+		return categoria;
+	}
 	@Override 
 	public boolean equals(Object obj) {
 		Palavra palavra = (Palavra) obj;

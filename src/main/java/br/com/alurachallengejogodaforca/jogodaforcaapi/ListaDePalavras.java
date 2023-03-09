@@ -15,7 +15,7 @@ import br.com.alurachallengejogodaforca.jogodaforcaapi.factory.ConnectionFactory
 import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
 
 @RestController
-public class PalavrasAleatorias {
+public class ListaDePalavras {
 	
 	@Value("${database.host}")
 	String host;
@@ -43,11 +43,22 @@ public class PalavrasAleatorias {
 			
 			if(i == numeroMaximo) break;
 					
-			listaDePalavras.add(new Palavra(palavra.getID(),palavra.getConteudo()));
+			listaDePalavras.add(new Palavra(palavra.getID(),palavra.getConteudo(),palavra.getCategoria()));
 			i++;
 		}
 		
 		return new ResponseEntity<HashSet<Palavra>>(listaDePalavras, HttpStatus.OK);
 	}
 
+	@CrossOrigin
+	@GetMapping("/palavras-solicitadas")
+	public ResponseEntity<HashSet<Palavra>> palavrasSolicitadas() {
+		
+		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
+		
+		HashSet<Palavra> listaDePalavras = consulta.consultaTodas("palavras_solicitadas");
+
+		
+		return new ResponseEntity<HashSet<Palavra>>(listaDePalavras, HttpStatus.OK);
+	}
 }

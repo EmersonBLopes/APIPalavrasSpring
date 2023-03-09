@@ -30,7 +30,7 @@ public class ConsultaController {
 				ResultSet rst = pst.getResultSet();
 
 				while(rst.next()) {
-					palavra = new Palavra(rst.getInt(1),rst.getString(2));
+					palavra = new Palavra(rst.getInt(1),rst.getString(2),rst.getString(3));
 				}
 			}
 		}catch(SQLException ex) {
@@ -43,7 +43,7 @@ public class ConsultaController {
 	
 	public HashSet<Palavra> consultaTodas(String tabela) {
 		
-		String query = String.format("SELECT id,conteudo FROM %s",tabela);
+		String query = String.format("SELECT * FROM %s",tabela);
 		HashSet<Palavra> listaDePalavras = new LinkedHashSet<>();
 		
 		try(Statement stm = con.createStatement()){
@@ -51,7 +51,7 @@ public class ConsultaController {
 			ResultSet rst = stm.getResultSet();
 			
 			while(rst.next()) {
-				listaDePalavras.add(new Palavra(rst.getInt(1),rst.getString(2)));
+				listaDePalavras.add(new Palavra(rst.getInt(1),rst.getString(2),rst.getString(3)));
 			}
 			
 		}catch(SQLException ex) {
