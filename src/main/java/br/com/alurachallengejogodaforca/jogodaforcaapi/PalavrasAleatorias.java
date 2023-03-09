@@ -34,7 +34,7 @@ public class PalavrasAleatorias {
 		
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
 		
-		HashSet<Palavra> palavras = consulta.consultaTodas();
+		HashSet<Palavra> palavras = consulta.consultaTodas("palavras");
 
 		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = consulta.consultaNumeroDeLinhas("palavras");
 		

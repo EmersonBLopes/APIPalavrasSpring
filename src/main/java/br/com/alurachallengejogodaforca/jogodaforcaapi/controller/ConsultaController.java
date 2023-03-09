@@ -41,9 +41,9 @@ public class ConsultaController {
 		return palavra;
 	}
 	
-	public HashSet<Palavra> consultaTodas() {
+	public HashSet<Palavra> consultaTodas(String tabela) {
 		
-		String query = "SELECT id,conteudo FROM palavras";
+		String query = String.format("SELECT id,conteudo FROM %s",tabela);
 		HashSet<Palavra> listaDePalavras = new LinkedHashSet<>();
 		
 		try(Statement stm = con.createStatement()){
