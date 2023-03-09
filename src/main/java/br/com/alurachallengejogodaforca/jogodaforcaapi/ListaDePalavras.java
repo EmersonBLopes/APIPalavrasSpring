@@ -43,7 +43,7 @@ public class ListaDePalavras {
 			
 			if(i == numeroMaximo) break;
 					
-			listaDePalavras.add(new Palavra(palavra.getID(),palavra.getConteudo(),palavra.getCategoria()));
+			listaDePalavras.add(new Palavra(palavra.getID(),palavra.getConteudo()));
 			i++;
 		}
 		

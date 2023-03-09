@@ -30,7 +30,7 @@ public class ConsultaController {
 				ResultSet rst = pst.getResultSet();
 
 				while(rst.next()) {
-					palavra = new Palavra(rst.getInt(1),rst.getString(2),rst.getString(3));
+					palavra = new Palavra(rst.getInt(1),rst.getString(2));
 				}
 			}
 		}catch(SQLException ex) {
@@ -51,7 +51,7 @@ public class ConsultaController {
 			ResultSet rst = stm.getResultSet();
 			
 			while(rst.next()) {
-				listaDePalavras.add(new Palavra(rst.getInt(1),rst.getString(2),rst.getString(3)));
+				listaDePalavras.add(new Palavra(rst.getInt(1),rst.getString(2)));
 			}
 			
 		}catch(SQLException ex) {
