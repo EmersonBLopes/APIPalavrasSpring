@@ -20,6 +20,12 @@ public class ConsultaController {
 		this.con = con;
 	}
 	
+	/**
+	 * 
+	 * @param ID da palavra que será requisitada
+	 * @param tabela a qual a palavra será procurada
+	 * @return retorna a palavra solicitada como uma instância da classe Palavra
+	 */
 	public Palavra consultaPalavra(int ID,String tabela){
 
 		Palavra palavra = null;
@@ -43,6 +49,12 @@ public class ConsultaController {
 		return palavra;
 	}
 	
+	/**
+	 * 
+	 * @param tabela a qual será consulada as informações 
+	 * @param ordenar se true as informações serão retornadas em ordem senão serão retornadas aleatóriamente
+	 * @return Set<Modelo> com as informações da tabela
+	 */
 	public Set<Modelo> consultaTabela(String tabela, boolean ordenar) {
 		
 		String query = String.format("SELECT * FROM %s",tabela);
@@ -66,23 +78,25 @@ public class ConsultaController {
 		return listaDeResultados;
 	}
 	
+	/**
+	 * 
+	 * @param palavra que será consultada sua existência
+	 * @param tabela que será consultada
+	 * @return retorna true se a palavra existir senão false
+	 */
 	public boolean consultaExiste(String palavra, String tabela) {
-		boolean resultado = false;
 		String query = String.format("SELECT id FROM %s WHERE conteudo = ?",tabela);
 		
 		try(PreparedStatement pst = con.prepareStatement(query)){
 			pst.setString(1, palavra);
 			pst.execute();
 			ResultSet rs = pst.getResultSet();
-			resultado = rs.next();
-			while(rs.next()) {
-				System.out.println(rs.getInt(1));
-			}
+			return rs.next();
 		}catch(SQLException ex) {
 			System.out.println(ex.getMessage());
 			System.out.println("Conexão com o banco de dados falhou");
 		}
-		return resultado;
+		return false;
 	}
 	
 	public Palavra consultaPorCategoria(String categoriaID[]) {
@@ -91,10 +105,15 @@ public class ConsultaController {
 		return palavra;
 	}
 	
-	public int consultaNumeroDeLinhas(String nomeDaTabela) {
+	/**
+	 * 
+	 * @param tabela tabela que será consultada
+	 * @return se a tabela existir retornara o número de linhas caso contrário retorna -1
+	 */
+	public int consultaNumeroDeLinhas(String tabela) {
 		
 		try(Statement stm = this.con.createStatement()){
-			stm.execute(String.format("SELECT COUNT(*) FROM %s",nomeDaTabela));
+			stm.execute(String.format("SELECT COUNT(*) FROM %s",tabela));
 			ResultSet rs = stm.getResultSet();
 				
 			while(rs.next()) {
@@ -109,10 +128,15 @@ public class ConsultaController {
 		return -1;
 	}
 	
-	public int consultaUltimaLinha(String nomeDaTabela) {
+	/**
+	 * 
+	 * @param tabela que será consultada
+	 * @return	retorna o ID do último elemento caso contrário retorna -1
+	 */
+	public int consultaUltimaLinha(String tabela) {
 			
 		try(Statement stm = this.con.createStatement()){
-			stm.execute(String.format("SELECT id FROM %s ORDER BY id DESC LIMIT 1",nomeDaTabela));
+			stm.execute(String.format("SELECT id FROM %s ORDER BY id DESC LIMIT 1",tabela));
 			ResultSet rs = stm.getResultSet();
 				
 			while(rs.next()) {

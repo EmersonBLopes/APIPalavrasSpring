@@ -43,9 +43,9 @@ public class Requisicoes {
 		int i = 0;
 		for (Modelo palavra : palavras) {
 			
-			if(i == numeroMaximo) break;
-					
+			if(i == numeroMaximo) break;		
 			listaDePalavras.add(new Palavra(palavra.getID(),palavra.getConteudo()));
+			
 			i++;
 		}
 		
