@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Modelo;
 import br.com.alurachallengejogodaforca.jogodaforcaapi.modelo.Palavra;
@@ -42,20 +43,22 @@ public class ConsultaController {
 		return palavra;
 	}
 	
-	public LinkedHashSet<Modelo> consultaTabela(String tabela) {
+	public Set<Modelo> consultaTabela(String tabela, boolean ordenar) {
 		
 		String query = String.format("SELECT * FROM %s",tabela);
-		LinkedHashSet<Modelo> listaDeResultados = new LinkedHashSet<>();
+		
+		Set<Modelo> listaDeResultados = ordenar ? new LinkedHashSet<>() : new HashSet<>();
 		
 		try(Statement stm = con.createStatement()){
+			
 			stm.execute(query);
 			ResultSet rst = stm.getResultSet();
 			
 			while(rst.next()) {
 				listaDeResultados.add(new Modelo(rst.getInt(1),rst.getString(2)));
 			}
-			
 		}catch(SQLException ex) {
+			
 			System.out.println(ex.getMessage());
 			System.out.println("Conexão com o banco de dados falhou");
 		}

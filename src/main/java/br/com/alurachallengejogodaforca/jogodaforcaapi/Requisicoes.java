@@ -2,6 +2,7 @@ package br.com.alurachallengejogodaforca.jogodaforcaapi;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class Requisicoes {
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
 		HashSet<Palavra> listaDePalavras = new HashSet<Palavra>();
 		
-		HashSet<Modelo> palavras = consulta.consultaTabela("palavras");
+		HashSet<Modelo> palavras = (HashSet<Modelo>) consulta.consultaTabela("palavras",false);
 
 		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = consulta.consultaNumeroDeLinhas("palavras");
 		
@@ -53,14 +54,14 @@ public class Requisicoes {
 
 	@CrossOrigin
 	@GetMapping("/palavras-solicitadas")
-	public ResponseEntity<HashSet<Modelo>> palavrasSolicitadas() {
+	public ResponseEntity<Set<Modelo>> palavrasSolicitadas() {
 		
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
 		
-		HashSet<Modelo> listaDePalavras = consulta.consultaTabela("palavras_solicitadas");
+		Set<Modelo> listaDePalavras = consulta.consultaTabela("palavras_solicitadas",true);
 
 		
-		return new ResponseEntity<HashSet<Modelo>>(listaDePalavras, HttpStatus.OK);
+		return new ResponseEntity<Set<Modelo>>(listaDePalavras, HttpStatus.OK);
 	}
 	
 	@CrossOrigin
@@ -69,7 +70,7 @@ public class Requisicoes {
 		
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
 		
-		LinkedHashSet<Modelo> listaDeCategorias = consulta.consultaTabela("categorias");		
+		LinkedHashSet<Modelo> listaDeCategorias = (LinkedHashSet<Modelo>) consulta.consultaTabela("categorias",true);		
 		
 		return new ResponseEntity<LinkedHashSet<Modelo>>(listaDeCategorias, HttpStatus.OK);
 	}
