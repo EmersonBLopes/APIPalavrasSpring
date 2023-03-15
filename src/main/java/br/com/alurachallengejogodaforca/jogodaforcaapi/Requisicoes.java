@@ -31,14 +31,14 @@ public class Requisicoes {
 	
 	@CrossOrigin
 	@GetMapping("/palavras-aleatorias")
-	public ResponseEntity<HashSet<Palavra>> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "10") int numeroMaximo) {
+	public ResponseEntity<HashSet<Palavra>> gerarPalavrasAleatorias(@RequestParam(name = "numeroMaximo", defaultValue = "0") int numeroMaximo) {
 		
 		ConsultaController consulta = new ConsultaController(new ConnectionFactory(host, user, password).criaConexao());
 		HashSet<Palavra> listaDePalavras = new HashSet<Palavra>();
 		
 		HashSet<Modelo> palavras = (HashSet<Modelo>) consulta.consultaTabela("palavras",false);
 
-		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras")) numeroMaximo = consulta.consultaNumeroDeLinhas("palavras");
+		if(numeroMaximo > consulta.consultaNumeroDeLinhas("palavras") || numeroMaximo <= 0) numeroMaximo = consulta.consultaUltimaLinha("palavras");
 		
 		int i = 0;
 		for (Modelo palavra : palavras) {
