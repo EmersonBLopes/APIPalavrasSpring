@@ -57,5 +57,24 @@ public class SolicitarPalavra {
 		
 		return resposta;
 	}
+	
+	@CrossOrigin
+	@PostMapping("/remover-palavra")
+	public ResponseEntity<String> removerPalavra(@RequestBody String IDSolicitado){
+		
+		int ID = 0;
+		
+		try {
+			ID = Integer.parseInt(IDSolicitado);
+		}catch(NumberFormatException ex){
+			System.out.println("erro "+ex.getMessage());
+		}
+
+		SolicitarController solicitador = new SolicitarController(new ConnectionFactory(host, user, password).criaConexao());
+		
+		ResponseEntity<String> resposta = solicitador.removerPalavra("palavras_solicitadas",ID) ? new ResponseEntity<String>("Palavra removida.",HttpStatus.ACCEPTED) : new ResponseEntity<String>("Erro ao remover palavra",HttpStatus.BAD_REQUEST);
+		
+		return resposta;
+	}
 }
 
