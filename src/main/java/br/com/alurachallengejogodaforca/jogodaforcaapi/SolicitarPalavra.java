@@ -38,5 +38,24 @@ public class SolicitarPalavra {
 		
 		return new ResponseEntity<String>("Palavra já solicitada",HttpStatus.ALREADY_REPORTED);
 	}
+	
+	@CrossOrigin
+	@PostMapping("/aceitar-palavra")
+	public ResponseEntity<String> aceitarPalavra(@RequestBody String IDSolicitado){
+		
+		int ID = 0;
+		
+		try {
+			ID = Integer.parseInt(IDSolicitado);
+		}catch(NumberFormatException ex){
+			System.out.println("erro "+ex.getMessage());
+		}
+
+		SolicitarController solicitador = new SolicitarController(new ConnectionFactory(host, user, password).criaConexao());
+		
+		ResponseEntity<String> resposta = solicitador.transferirPalavra(ID) ? new ResponseEntity<String>("Palavra aceita.",HttpStatus.ACCEPTED) : new ResponseEntity<String>("Erro ao aceitar palavra",HttpStatus.BAD_REQUEST);
+		
+		return resposta;
+	}
 }
 
