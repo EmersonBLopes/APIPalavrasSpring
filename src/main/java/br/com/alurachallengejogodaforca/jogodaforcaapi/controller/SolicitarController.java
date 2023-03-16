@@ -19,7 +19,7 @@ public class SolicitarController {
 		
 		ConsultaController consulta = new ConsultaController(this.con);
 		
-		if(!consulta.consultaExiste(palavra, "palavras_solicitadas") && !consulta.consultaExiste(palavra, "palavras")) {
+		if(!consulta.consultaExiste(palavra, "palavras_solicitadas") && !consulta.consultaExiste(palavra, "palavras") && !consulta.consultaExiste(palavra, "lista_negra")) {
 			try(PreparedStatement pst = con.prepareStatement("INSERT INTO palavras_solicitadas(conteudo)VALUES(?)")){
 				pst.setString(1, palavra);
 				pst.execute();
@@ -59,18 +59,19 @@ public class SolicitarController {
 	 *
 	 * @return returna true se ocorrer a transferência, caso contrário false
 	 */
-	public boolean transferirPalavra(int id) {
+	public boolean transferirPalavra(String tabela,int id) {
 		ConsultaController consulta = new ConsultaController(this.con);
 		
 		Palavra palavra = consulta.consultaPalavra(id,"palavras_solicitadas");
+		String query = String.format("INSERT INTO %s(conteudo)VALUES(?)",tabela);
 
 		if(!consulta.consultaExiste(palavra.getConteudo(), "palavras")) {
-			try(PreparedStatement PSTPalavraSolicitadas = con.prepareStatement("SELECT conteudo FROM palavras_solicitadas WHERE id = ?");){
+			try(PreparedStatement PSTPalavraSolicitadas = con.prepareStatement("SELECT conteudo FROM palavras_solicitadas WHERE id = ?")){
 				
 				PSTPalavraSolicitadas.setInt(1,id);
 				PSTPalavraSolicitadas.execute();
 				
-				PreparedStatement PSTTranferePalavra = con.prepareStatement("INSERT INTO palavras(conteudo)VALUES(?)"); 
+				PreparedStatement PSTTranferePalavra = con.prepareStatement(query); 
 				
 				try(ResultSet RSPalavraSelecionada = PSTPalavraSolicitadas.getResultSet()){
 					
